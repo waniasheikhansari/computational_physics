@@ -12,3 +12,24 @@ This error occurs because floating-point numbers (the way computers represent re
 
 ### **Example**:
 For instance, the number \( \frac{1}{3} \) in decimal is a repeating decimal:
+
+# 📉 Truncation Errors – A Short Guide
+
+## 🔍 What is a Truncation Error?
+A **truncation error** occurs when a mathematical process (like a series, integral, or derivative) is **approximated** by cutting off part of the computation.
+
+> It is the difference between the exact mathematical value and the approximation.
+
+---
+
+## 🧠 Common Causes
+- Approximating an **infinite series** with a finite number of terms  
+- Using **finite differences** to approximate derivatives  
+- **Numerical integration** (e.g., trapezoidal or Simpson’s rule)
+
+---
+
+## ✍️ Example
+
+Approximating `e^x` using a Taylor Series:
+
