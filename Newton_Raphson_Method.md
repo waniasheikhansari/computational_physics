@@ -55,11 +55,10 @@ Convergence is too slow or oscillates
 
 ```
 def f(x):
-    return x**2 - 2  # Example: Find square root of 2
+    return x**2 - 2  
 
 def df(x):
-    return 2 * x     # Derivative of f(x)
-
+    return 2 * x     
 def newton_raphson(x0, tol=1e-6, max_iter=10):
     print(f"Initial guess: x0 = {x0}")
     for i in range(max_iter):
@@ -81,7 +80,7 @@ def newton_raphson(x0, tol=1e-6, max_iter=10):
 
     print("Did not converge.")
     return None
-# Run the method
+
 root = newton_raphson(1.5)
 print(f"\nApproximate root: {root}")
 ```
