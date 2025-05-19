@@ -31,8 +31,6 @@ f(x) = x² - 2
 Derivative:
 f′(x) = 2x
 Step 1: Initial guess
-Copy
-Edit
 x₀ = 1.5
 Step 2: Iteration using the formula
 x₁ = 1.5 - (1.5² - 2) / (2×1.5) = 1.4167
@@ -41,7 +39,6 @@ x₂ = 1.4167 - (1.4167² - 2) / (2×1.4167) ≈ 1.4143
 
 Continues converging to √2 ≈ 1.4142
 ```
-
 ### How to Choose a Good Initial Guess
 1. Plot the function and pick a point near where it crosses the x-axis.
 2. Use the Intermediate Value Theorem to bracket the root.
@@ -56,6 +53,7 @@ Convergence is too slow or oscillates
 
 # Newton-Raphson Method in Python
 
+```
 def f(x):
     return x**2 - 2  # Example: Find square root of 2
 
@@ -83,7 +81,7 @@ def newton_raphson(x0, tol=1e-6, max_iter=10):
 
     print("Did not converge.")
     return None
-
 # Run the method
 root = newton_raphson(1.5)
 print(f"\nApproximate root: {root}")
+```
