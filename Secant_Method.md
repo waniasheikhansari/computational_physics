@@ -6,9 +6,10 @@ The **Secant Method** is a numerical technique used to find an approximate root 
 
 ## 📐 Formula
 
-\[
+$$
 x_{n+1} = x_n - \frac{f(x_n)(x_n - x_{n-1})}{f(x_n) - f(x_{n-1})}
-\]
+$$
+
 
 ---
 
@@ -78,6 +79,5 @@ def secant(x0, x1, tol=1e-6, max_iter=10):
         x0, x1 = x1, x2
     return x2
 
-# Try it:
 secant(1, 2)
 ```
