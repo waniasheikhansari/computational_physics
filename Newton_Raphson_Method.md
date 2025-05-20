@@ -86,39 +86,35 @@ print(f"\nApproximate root: {root}")
 ```
 
 ```
-import sympy as sp
+def f(x):
+    return x**2 - 2  
 
-x = sp.symbols('x')
-func = x**3 - x - 2
+def df(x):
+    return 2 * x     
 
-func_der = sp.diff(func, x)
-
-f = sp.lambdify(x, func, 'numpy')
-f_prime = sp.lambdify(x, func_der, 'numpy')
-
-def newton_raphson_sympy(x0, tol=1e-6, max_iter=10):
+def newton_raphson(x0, tol=1e-6, max_iter=10):
     print(f"Initial guess: x0 = {x0}")
-    
     for i in range(max_iter):
         fx = f(x0)
-        dfx = f_prime(x0)
-
+        dfx = df(x0)
+        
         if dfx == 0:
             print("Zero derivative. No solution found.")
             return None
 
         x1 = x0 - fx / dfx
         print(f"Iteration {i+1}: x = {x1:.6f}, f(x) = {f(x1):.6f}")
-
+        
         if abs(x1 - x0) < tol:
             print("Converged.")
             return x1
-
+        
         x0 = x1
 
     print("Did not converge.")
     return None
 
-root = newton_raphson_sympy(1.5)
+root = newton_raphson(1.5)
 print(f"\nApproximate root: {root}")
+
 ```
