@@ -1,5 +1,5 @@
 # Newton-Raphson Method
-The Newton-Raphson Method is an efficient numerical technique used to find approximate roots of real-valued equations.
+The Newton-Raphson Method is an efficient numerical technique used to find approximate roots of real-valued and complex equations.
 
 ## Formula
 To solve the equation:
