@@ -16,9 +16,8 @@ It approximates the area under the curve using **trapezoids** instead of rectang
 
 Divide `[a, b]` into `n` equal subintervals of width:
 
-\[
-h = \frac{b - a}{n}
-\]
+$h = \frac{b - a}{n}$
+
 
 Then the approximation becomes:
 
@@ -29,7 +28,7 @@ $$
 
 Where:
 - \( x_0 = a \), \( x_n = b \)  
-- \( x_i = a + i \cdot h \) for \( i = 1, 2, \ldots, n-1 \)
+- xᵢ = a + i · h  for i = 1, 2, ..., n−1
 
 
 ---
@@ -53,7 +52,31 @@ $$
 
 <pre> ∫₀¹ x² dx = 1/3 ≈ 0.3333 </pre>
 ---
+```
+def f(x):
+    return x**2
 
+def trapezoidal_rule(f, a, b, n):
+    h = (b - a) / n
+    result = f(a) + f(b)
+
+    for i in range(1, n):
+        x_i = a + i * h
+        result += 2 * f(x_i)
+
+    result *= h / 2
+    return result
+
+# Example
+a = 0
+b = 2
+n = 4
+
+approx = trapezoidal_rule(f, a, b, n)
+print(f"Approximate integral using Trapezoidal Rule: {approx}")
+
+```
+---
 ## 📈 Visualization (Python Code)
 
 ```python
