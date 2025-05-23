@@ -83,24 +83,25 @@ print(f"Approximate integral using Trapezoidal Rule: {approx}")
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Define the function
 def f(x):
     return x**2
-
 a, b = 0, 1
 n = 4
 x = np.linspace(a, b, 100)
 y = f(x)
 
-x_points = np.linspace(a, b, n+1)
-y_points = f(x_points)
+x_axis = np.linspace(a, b, n + 1)
+y_axis = f(x_axis)
+
 
 plt.figure(figsize=(10, 6))
-plt.plot(x, y, 'b', label='$f(x) = x^2$', linewidth=2)
-plt.plot(x_points, y_points, 'ro', label='Sample points')
+plt.plot(x, y, 'b', label='$f(x) = x^2$', linewidth=2)  # Smooth curve
+plt.plot(x_axis, y_axis, 'ro', label='Sample points')  # Sample points
 
 for i in range(n):
-    xs = [x_points[i], x_points[i], x_points[i+1], x_points[i+1]]
-    ys = [0, y_points[i], y_points[i+1], 0]
+    xs = [x_axis[i], x_axis[i], x_axis[i+1], x_axis[i+1]]
+    ys = [0, y_axis[i], y_axis[i+1], 0]
     plt.fill(xs, ys, 'skyblue', edgecolor='black', alpha=0.5)
 
 plt.title("Trapezoidal Rule Approximation of $\\int_0^1 x^2 dx$")
@@ -109,3 +110,11 @@ plt.ylabel("f(x)")
 plt.legend()
 plt.grid(True)
 plt.show()
+
+
+h = (b - a) / n
+trapezoidal_approx = (y_axis[0] + y_axis[-1] + 2 * np.sum(y_points[1:-1])) * h / 2
+print("Trapezoidal Rule Approximation:", trapezoidal_approx)
+
+
+
