@@ -117,10 +117,7 @@ y_points = f(x_points)
 
 h = (b - a) / n
 
-simpson_approx = (h / 3) * (y_points[0] + 
-                            4 * np.sum(y_points[1:n:2]) +  # odd indices
-                            2 * np.sum(y_points[2:n-1:2]) +  # even indices
-                            y_points[n])
+simpson_approx = (h / 3) * (y_points[0] + 4 * np.sum(y_points[1:n:2]) + 2 * np.sum(y_points[2:n-1:2]) +  # even indices y_points[n])
 
 print("Simpson's Rule Approximation:", simpson_approx)
 print("Exact value:", 1/3)
