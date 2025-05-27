@@ -35,9 +35,9 @@ Romberg Integration builds a **triangular table** \( R_{n,m} \) using:
 
 ---
 
-## 📘 Python Example
+## Example
 
-Let's integrate the function \( f(x) = \frac{1}{1 + x^2} \) from 0 to 1.
+Let's integrate the function f(x) = 1 ⁄ (1 + x²) from 0 to 1.
 
 ```python
 import numpy as np
