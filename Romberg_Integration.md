@@ -34,6 +34,87 @@ Romberg Integration builds a **triangular table** \( R_{n,m} \) using:
 ![Romberg Formula](https://latex.codecogs.com/png.image?\dpi{150}R_{n,m}=\frac{4^mR_{n,m-1}-R_{n-1,m-1}}{4^m-1})
 
 ---
+# Romberg Integration Example
+
+We want to approximate the integral:
+
+```
+∫₀¹ 1 / (1 + x²) dx
+```
+
+This is the integral of:
+
+```
+f(x) = 1 / (1 + x²)
+```
+
+The exact value is:
+
+```
+arctan(1) - arctan(0) = π / 4 ≈ 0.7854
+```
+
+---
+
+## Step 1: Trapezoidal Approximation (Level 0)
+
+We start with one trapezoid:
+
+```
+R(0, 0) = (1 - 0)/2 * [f(0) + f(1)]
+        = 1/2 * [1 + 1/2]
+        = 0.75
+```
+
+---
+
+## Step 2: Two Intervals (Level 1)
+
+Evaluate at midpoint `x = 0.5`:
+
+```
+f(0.5) = 1 / (1 + 0.25) = 0.8
+
+R(1, 0) = 1/4 * [f(0) + 2*f(0.5) + f(1)]
+        = 1/4 * [1 + 2*0.8 + 0.5]
+        = 1/4 * 3.1 = 0.775
+```
+
+---
+
+## Step 3: Romberg Extrapolation
+
+Apply Richardson extrapolation:
+
+```
+R(1, 1) = (4^1 * R(1,0) - R(0,0)) / (4^1 - 1)
+        = (4 * 0.775 - 0.75) / 3
+        = (3.1 - 0.75) / 3
+        = 0.7833
+```
+
+---
+
+## Romberg Table (Partial)
+
+| n | m | R(n, m) |
+| - | - | ------- |
+| 0 | 0 | 0.7500  |
+| 1 | 0 | 0.7750  |
+| 1 | 1 | 0.7833  |
+
+---
+
+## ✅ Final Approximate Value
+
+```
+R(1, 1) ≈ 0.7833
+Exact value = π / 4 ≈ 0.7854
+```
+
+
+
+---
 
 ## Example
 
