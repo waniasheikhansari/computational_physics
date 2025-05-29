@@ -132,4 +132,81 @@ x, w = leggauss(n)
 integral = sum(wi * f(xi) for xi, wi in zip(x, w))
 
 print("Approximated integral:", integral)
+```
+### Example 
+Evaluate the integral:
 
+∫[1 to 3] (2x² + 3x + 1) dx
+
+using **2-point Gaussian quadrature**.
+
+---
+
+## Step 1: Gauss-Legendre Nodes and Weights (n = 2)
+
+For 2-point Gauss quadrature on [-1, 1]:
+
+- Nodes:
+  ξ₁ = -1/√3 ≈ -0.57735  
+  ξ₂ = +1/√3 ≈ +0.57735
+
+- Weights:
+  w₁ = 1  
+  w₂ = 1
+
+---
+
+## Step 2: Transform Interval [1, 3] to [-1, 1]
+
+Use the transformation:
+
+x = ((b - a) / 2) * ξ + (b + a) / 2  
+x = ((3 - 1) / 2) * ξ + (3 + 1) / 2  
+x = ξ + 2
+
+So:
+
+- x₁ = -1/√3 + 2 ≈ 1.42265  
+- x₂ = +1/√3 + 2 ≈ 2.57735
+
+---
+
+## Step 3: Evaluate the Function at Transformed Nodes
+
+f(x) = 2x² + 3x + 1
+
+- f(x₁) ≈ f(1.42265) ≈ 9.316  
+- f(x₂) ≈ f(2.57735) ≈ 22.021
+
+---
+
+## Step 4: Apply Gaussian Quadrature Formula
+
+∫[1 to 3] f(x) dx ≈ (b - a)/2 * [ w₁ * f(x₁) + w₂ * f(x₂) ]  
+                 ≈ (3 - 1)/2 * [9.316 + 22.021]  
+                 ≈ 1 * 31.337  
+                 ≈ **31.34**
+
+---
+
+## Final Answer
+
+Approximate value: **31.34**
+
+```
+import numpy as np
+
+# Function to integrate
+def f(x):
+    return x**4 - 2*x + 1
+
+x_nodes, w_weights = np.polynomial.legendre.leggauss(3)
+
+a, b = 0, 2
+def transform(x):
+    return 0.5*(b - a)*x + 0.5*(b + a)
+
+integral = 0.5 * (b - a) * np.sum(w_weights * f(transform(x_nodes)))
+
+print(f"Gaussian quadrature approximation (n=3): {integral}")
+```
