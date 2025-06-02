@@ -1,84 +1,68 @@
-```
 import numpy as np
+import scipy.integrate as spi
 import sympy as sp
-from scipy.integrate import romberg
 
-# Symbol for parsing the function
-x = sp.Symbol('x')
-
-def get_function_input():
-    expr_str = input("Enter the function in terms of x (e.g., 2*x**2 + 3*x + 1): ")
+def get_function():
+    x = sp.symbols('x')
+    expr = input("Enter the function f(x) using Python syntax (e.g., sin(x), x**2, exp(x)): ")
     try:
-        expr = sp.sympify(expr_str)
-        f = sp.lambdify(x, expr, modules=['numpy'])
-        return f, expr
-    except Exception:
-        print("Invalid function. Please try again.")
-        return get_function_input()
+        parsed_expr = sp.sympify(expr)
+        f = sp.lambdify(x, parsed_expr, modules=['numpy'])
+        return f
+    except (sp.SympifyError, NameError) as e:
+        print(f"Error parsing the function: {e}")
+        return get_function()
 
-def trapezoidal_rule(f, a, b, n=100):
+def trapezoidal_rule(f, a, b, n):
     h = (b - a) / n
-    result = 0.5 * (f(a) + f(b))
-    for i in range(1, n):
-        result += f(a + i * h)
-    return h * result
+    x = np.linspace(a, b, n+1)
+    y = f(x)
+    return h * (0.5*y[0] + np.sum(y[1:-1]) + 0.5*y[-1])
 
-def simpson_rule(f, a, b, n=100):
-    if n % 2:
-        n += 1  # Simpson’s rule requires even number of intervals
+def simpsons_rule(f, a, b, n):
+    if n % 2 != 0:
+        raise ValueError("Simpson's rule requires an even number of intervals.")
     h = (b - a) / n
-    result = f(a) + f(b)
-    for i in range(1, n):
-        factor = 4 if i % 2 else 2
-        result += factor * f(a + i * h)
-    return h * result / 3
-
-def gaussian_quadrature(f, a, b, n=2):
-    [xi, wi] = np.polynomial.legendre.leggauss(n)
-    result = 0
-    for i in range(n):
-        x_trans = ((b - a) / 2) * xi[i] + (b + a) / 2
-        result += wi[i] * f(x_trans)
-    return (b - a) / 2 * result
+    x = np.linspace(a, b, n+1)
+    y = f(x)
+    return h/3 * (y[0] + 4 * np.sum(y[1:-1:2]) + 2 * np.sum(y[2:-2:2]) + y[-1])
 
 def romberg_integration(f, a, b):
-    return romberg(f, a, b, show=False)
+    return spi.romberg(f, a, b)
+
+def gaussian_quadrature(f, a, b, n):
+    result, _ = spi.fixed_quad(f, a, b, n=n)
+    return result
 
 def main():
-    print("Numerical Integration Tool")
-    f, expr = get_function_input()
+    f = get_function()
+    a = float(input("Enter the lower limit (a): "))
+    b = float(input("Enter the upper limit (b): "))
+    n = int(input("Enter the number of intervals (n): "))
 
-    a = float(input("Enter the lower limit of integration: "))
-    b = float(input("Enter the upper limit of integration: "))
-
-    print("\nChoose numerical method:")
+    print("\nChoose integration method:")
     print("1. Trapezoidal Rule")
     print("2. Simpson's Rule")
-    print("3. Gaussian Quadrature (2-point)")
-    print("4. Romberg Integration")
+    print("3. Romberg Integration")
+    print("4. Gaussian Quadrature")
 
-    choice = input("Enter 1, 2, 3, or 4: ")
+    method = input("Enter the number corresponding to your choice: ")
 
-    if choice == '1':
-        result = trapezoidal_rule(f, a, b)
-        method = "Trapezoidal Rule"
-    elif choice == '2':
-        result = simpson_rule(f, a, b)
-        method = "Simpson's Rule"
-    elif choice == '3':
-        result = gaussian_quadrature(f, a, b)
-        method = "Gaussian Quadrature (2-point)"
-    elif choice == '4':
-        result = romberg_integration(f, a, b)
-        method = "Romberg Integration"
-    else:
-        print("Invalid choice.")
-        return
-
-    print(f"\nMethod Used: {method}")
-    print(f"Function: {expr}")
-    print(f"Integral from {a} to {b} ≈ {result:.6f}")
+    try:
+        if method == '1':
+            result = trapezoidal_rule(f, a, b, n)
+        elif method == '2':
+            result = simpsons_rule(f, a, b, n)
+        elif method == '3':
+            result = romberg_integration(f, a, b)
+        elif method == '4':
+            result = gaussian_quadrature(f, a, b, n)
+        else:
+            print("Invalid choice.")
+            return
+        print(f"\nResult of integration: {result}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
-    
