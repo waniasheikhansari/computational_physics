@@ -43,44 +43,86 @@ When integration limits depend on each other (e.g., triangular or curved domains
 
 ### Exercise 5.14: Gravity from a Sheet
 
-* A square sheet (10m x 10m, 10,000 kg) exerts gravitational force on a 1 kg mass located a distance $z$ above the center.
-* The z-component of force is:
+A uniform square sheet of metal is floating motionless in space.
+It has:
 
-$$
-F_z(z) = G \sigma z \int_{-L/2}^{L/2} \int_{-L/2}^{L/2} \frac{dx \ dy}{(x^2 + y^2 + z^2)^{3/2}}
-$$
-
-Where:
-
-* $G$ is gravitational constant.
-* $\sigma =$ mass/area.
-
-You solve it with 2D Gaussian quadrature and plot $F_z(z)$ vs $z$.
+* **Side length**: $L = 10 \text{ m}$
+* **Mass**: $M = 10^4 \text{ kg}$
+* A **1 kg point mass** is located a vertical distance $z$ above the center of the square.
 
 ---
 
-### Artifact at z \approx 0
+## (a) Derive the Expression for Force
 
-At very small $z$, the integral may show a sudden drop. This is numerical error due to:
+Let the square lie in the $xy$-plane with center at the origin.
 
-* Denominator approaching zero.
-* Too coarse sampling near the singularity.
+The mass per unit area of the sheet is:
 
-**Fix:**
+$\sigma = \frac{M}{L^2} = \frac{10^4}{100} = 100 \text{ kg/m}^2$
 
-* Use adaptive mesh refinement.
-* Avoid evaluating the function too close to $z = 0$.
+An infinitesimal element of the sheet $dA = dx\,dy$ at position $(x, y)$ contributes an infinitesimal gravitational force:
+
+$d\vec{F} = -\frac{G \cdot \sigma \cdot m \cdot \vec{r}}{r^3} \, dx\,dy$
+
+where:
+
+* $\vec{r} = x \hat{i} + y \hat{j} + z \hat{k}$
+* $r = \sqrt{x^2 + y^2 + z^2}$
+
+We want the component of the force in the z-direction:
+
+$dF_z = -\frac{G \sigma m z}{(x^2 + y^2 + z^2)^{3/2}} dx\,dy$
+
+Integrating over the square:
+
+$F_z = -G \sigma m z \int_{-L/2}^{L/2} \int_{-L/2}^{L/2} \frac{dx\,dy}{(x^2 + y^2 + z^2)^{3/2}}$
 
 ---
 
-### Applications
+## (b) Numerical Calculation Using Gaussian Quadrature
 
-Used in:
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from numpy.polynomial.legendre import leggauss
 
-* Gravity/mass simulations
-* Quantum mechanics
-* Thermodynamics
-* Electromagnetism
-* Fluid dynamics
+G = 6.674e-11       # Gravitational constant (m^3 kg^-1 s^-2)
+L = 10              # Side length of square (m)
+M = 1e4             # Mass of sheet (kg)
+sigma = M / (L * L) # Mass per unit area (kg/m^2)
+m = 1               # Point mass (kg)
+N = 100             # Gaussian quadrature points per axis
 
----
+x, wx = leggauss(N)
+y, wy = leggauss(N)
+
+# Transform from [-1,1] to [-L/2, L/2]
+x = x * (L / 2)
+y = y * (L / 2)
+wx = wx * (L / 2)
+wy = wy * (L / 2)
+
+# Meshgrid for 2D integral
+X, Y = np.meshgrid(x, y)
+WX, WY = np.meshgrid(wx, wy)
+W = WX * WY
+
+def compute_force_z(z):
+    R_squared = X**2 + Y**2 + z**2
+    integrand = z / R_squared**(3/2)
+    Fz = -G * sigma * m * np.sum(integrand * W)
+    return Fz
+
+# z range and compute force
+z_values = np.linspace(0.1, 10, 200)
+Fz_values = [compute_force_z(z) for z in z_values]
+
+# Plot
+plt.figure(figsize=(8, 5))
+plt.plot(z_values, Fz_values)
+plt.xlabel("z (m)")
+plt.ylabel("Gravitational Force Fz (N)")
+plt.title("Gravitational Force vs. Height Above Sheet")
+plt.grid(True)
+plt.show()
+```
