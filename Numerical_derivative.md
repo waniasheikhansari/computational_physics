@@ -101,6 +101,93 @@ print("Forward Difference:", forward_diff(f, x))
 print("Backward Difference:", backward_diff(f, x))
 print("Exact Derivative (cos):", np.cos(x))
 ```
+---
+# Errors in Numerical Derivatives
+
+When computing derivatives using **forward** or **backward differences**, the results are not perfectly accurate. There are two key sources of error:
+
+1. **Rounding Error:** Caused by limitations in computer precision (discussed in Section 4.2).
+2. **Approximation Error:** Because we cannot actually take the limit $h \to 0$, we only approximate the derivative.
+
+Unlike numerical integration (where rounding errors are often negligible), both error types play significant roles when computing numerical derivatives.
+
+---
+
+## Forward Difference Error Analysis
+
+We analyze errors using the **Taylor expansion**:
+
+$$
+f(x + h) = f(x) + h f'(x) + \frac{h^2}{2} f''(x) + \dots
+$$
+
+Rearranging:
+
+$$
+\frac{f(x + h) - f(x)}{h} = f'(x) + \frac{h}{2} f''(x) + \dots \tag{5.90}
+$$
+
+### Approximation Error
+
+* Neglecting higher-order terms introduces **approximation error**.
+* To leading order:
+
+$$
+\text{Approximation Error} \approx \frac{h}{2} |f''(x)|
+$$
+
+So, **smaller** $h$ leads to **more accuracy**, up to a point.
+
+### Rounding Error
+
+If $h$ is too small:
+
+* $f(x + h)$ and $f(x)$ become very close.
+* Subtracting nearly equal numbers causes large **rounding errors**.
+
+From Section 4.2:
+
+* Let $C$ be the relative error constant (typically $C \approx 10^{-16}$ in Python).
+* Then:
+
+$$
+\text{Rounding Error} \approx \frac{2C |f(x)|}{h}
+$$
+
+---
+
+## Total Error
+
+Let total error $\epsilon$ be the sum of rounding and approximation errors:
+
+$$
+\epsilon(h) = \frac{2C |f(x)|}{h} + \frac{h}{2} |f''(x)| \tag{5.91}
+$$
+
+To find optimal $h$, minimize $\epsilon(h)$:
+
+$$
+\frac{d\epsilon}{dh} = -\frac{2C |f(x)|}{h^2} + \frac{1}{2} |f''(x)| = 0
+$$
+
+Solving gives:
+
+$$
+h = \sqrt{\frac{4C |f(x)|}{|f''(x)|}} \tag{5.93}
+$$
+
+### Final Error Estimate
+
+Substitute optimal $h$ into error formula:
+
+$$
+\epsilon = \sqrt{4C |f(x)| |f''(x)|} \tag{5.94}
+$$
+
+If $f(x)$ and $f''(x) \approx 1$:
+
+* $h \approx \sqrt{C} \approx 10^{-8}$
+* $\epsilon \approx 10^{-8}$
 
 ---
 
