@@ -106,7 +106,7 @@ print("Exact Derivative (cos):", np.cos(x))
 
 When computing derivatives using **forward** or **backward differences**, the results are not perfectly accurate. There are two key sources of error:
 
-1. **Rounding Error:** Caused by limitations in computer precision (discussed in Section 4.2).
+1. **Rounding Error:** Caused by limitations in computer precision/
 2. **Approximation Error:** Because we cannot actually take the limit $h \to 0$, we only approximate the derivative.
 
 Unlike numerical integration (where rounding errors are often negligible), both error types play significant roles when computing numerical derivatives.
@@ -123,9 +123,7 @@ $$
 
 Rearranging:
 
-$$
-\frac{f(x + h) - f(x)}{h} = f'(x) + \frac{h}{2} f''(x) + \dots \tag{5.90}
-$$
+(f(x + h) - f(x)) / h = f'(x) + (h / 2) * f''(x) + ...
 
 ### Approximation Error
 
@@ -144,9 +142,6 @@ If $h$ is too small:
 
 * $f(x + h)$ and $f(x)$ become very close.
 * Subtracting nearly equal numbers causes large **rounding errors**.
-
-From Section 4.2:
-
 * Let $C$ be the relative error constant (typically $C \approx 10^{-16}$ in Python).
 * Then:
 
@@ -158,36 +153,37 @@ $$
 
 ## Total Error
 
-Let total error $\epsilon$ be the sum of rounding and approximation errors:
+Let total error `ε(h)` be the sum of rounding and approximation errors:
 
-$$
-\epsilon(h) = \frac{2C |f(x)|}{h} + \frac{h}{2} |f''(x)| \tag{5.91}
-$$
+```
+ε(h) = (2C * |f(x)|) / h + (h / 2) * |f''(x)|     
+```
 
-To find optimal $h$, minimize $\epsilon(h)$:
+To find the optimal value of `h`, minimize `ε(h)` by taking its derivative:
 
-$$
-\frac{d\epsilon}{dh} = -\frac{2C |f(x)|}{h^2} + \frac{1}{2} |f''(x)| = 0
-$$
+```
+dε/dh = -(2C * |f(x)|) / h^2 + (1/2) * |f''(x)| = 0
+```
 
-Solving gives:
+Solving the equation for `h` gives:
 
-$$
-h = \sqrt{\frac{4C |f(x)|}{|f''(x)|}} \tag{5.93}
-$$
+```
+h = sqrt((4C * |f(x)|) / |f''(x)|)                 
+```
 
 ### Final Error Estimate
 
-Substitute optimal $h$ into error formula:
+Substitute the optimal `h` back into the error formula:
 
-$$
-\epsilon = \sqrt{4C |f(x)| |f''(x)|} \tag{5.94}
-$$
+```
+ε = sqrt(4C * |f(x)| * |f''(x)|)                    
+```
 
-If $f(x)$ and $f''(x) \approx 1$:
+Assuming `|f(x)| ≈ 1` and `|f''(x)| ≈ 1`:
 
-* $h \approx \sqrt{C} \approx 10^{-8}$
-* $\epsilon \approx 10^{-8}$
+* `h ≈ sqrt(C) ≈ 10^-8`
+* `ε ≈ 10^-8`
+
 
 ---
 
