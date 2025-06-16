@@ -1,24 +1,6 @@
-
-## LU Decomposition and Gaussian Elimination
+## LU Decomposition
 
 Gaussian elimination solves systems of linear equations by converting a matrix into an upper-triangular form, then solving via backsubstitution. However, this process can be reformulated using **matrix operations** to make it more systematic and efficient, especially when solving multiple systems with the same matrix.
-
-### The Matrix Multiplication Representation
-
-Each elimination step in Gaussian elimination corresponds to multiplying by a **lower-triangular matrix**. For instance, in the second step, where we eliminate the second column below the diagonal:
-
-```math
-L_1 = \begin{bmatrix}
-1 & 0 & 0 & 0 \\
--b_{10} & 1 & 0 & 0 \\
--b_{20} & 0 & 1 & 0 \\
--b_{30} & 0 & 0 & 1
-\end{bmatrix}
-```
-
-This matrix, when multiplied by the original matrix `A`, performs the first elimination.
-
-Subsequent elimination steps introduce additional lower-triangular matrices `L2`, `L3`, etc., each responsible for zeroing out below-diagonal elements in their respective columns.
 
 ### Full Elimination as Matrix Multiplication
 
@@ -129,11 +111,3 @@ More resources:
 * [scipy.org](https://www.scipy.org)
 
 ---
-
-## Summary
-
-* Gaussian elimination can be represented using matrix multiplication
-* LU decomposition expresses a matrix `A` as a product `LU`
-* Solving `Ax = v` becomes two simpler steps: `Ly = v`, then `Ux = y`
-* LU is widely used and implemented in numerical libraries like NumPy and SciPy
-* Always use pivoting to ensure numerical stability
