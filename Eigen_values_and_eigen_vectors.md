@@ -170,15 +170,99 @@ print("Diagonal Matrix (Eigenvalues):\n", D)
 print("Matrix V (Eigenvectors):\n", V)
 ```
 
-This implementation manually computes QR decomposition using the Gram-Schmidt process and iterates the QR algorithm.
+
+
+## Step-by-Step Breakdown (First 2 Iterations)
+
+### Initialization:
+
+* **A** = \[\[2, 1], \[1, 2]]
+* **A\_k** = A.copy() → \[\[2, 1], \[1, 2]]
+* **V** = Identity Matrix → \[\[1, 0], \[0, 1]]
 
 ---
 
-## 8. Notes
+### Iteration 1:
 
-* `eigh()` and `eigvalsh()` assume the matrix is symmetric or Hermitian.
-* Only the lower triangle of the matrix is used. The upper triangle is ignored.
-* For complex Hermitian matrices, the functions assume the upper triangle is the complex conjugate of the lower.
-* For general matrices (not symmetric), use `eig()` and `eigvals()`.
+#### QR Decomposition of A\_k:
+
+1. **First column (v = A\[:, 0]) = \[2, 1]**
+
+   * Normalize: |v| = sqrt(2^2 + 1^2) = sqrt(5) ≈ 2.236
+   * Q\[:, 0] = \[2/2.236, 1/2.236] ≈ \[0.894, 0.447]
+
+2. **Second column (v = A\[:, 1]) = \[1, 2]**
+
+   * Project onto Q\[:, 0]: R\[0, 1] = dot(\[0.894, 0.447], \[1, 2]) ≈ 1.788
+   * Subtract projection: v = \[1, 2] - 1.788\*\[0.894, 0.447] ≈ \[-0.6, 1.2]
+   * Normalize: |v| ≈ 1.341
+   * Q\[:, 1] = \[-0.447, 0.894]
+
+3. **Q and R**:
+
+   * Q ≈ \[\[ 0.894, -0.447], \[0.447, 0.894]]
+   * R ≈ \[\[2.236, 1.788], \[0, 1.341]]
+
+#### Update A\_k:
+
+* A\_k = R @ Q ≈ \[\[2.8, 0.6], \[0.6, 1.2]]
+
+#### Update V:
+
+* V = I @ Q = Q
 
 ---
+
+### Iteration 2:
+
+1. **QR Decomposition of A\_k = \[\[2.8, 0.6], \[0.6, 1.2]]**
+
+   * First column: v = \[2.8, 0.6]
+
+     * |v| ≈ 2.863
+     * Q\[:, 0] ≈ \[0.978, 0.209]
+   * Second column: v = \[0.6, 1.2]
+
+     * R\[0, 1] = dot(Q\[:, 0], v) ≈ 0.976
+     * Subtract projection, normalize → Q\[:, 1] ≈ \[-0.203, 0.979]
+
+2. **New Q and R**:
+
+   * Q ≈ \[\[ 0.978, -0.203], \[0.209, 0.979]]
+   * R ≈ \[\[2.863, 0.976], \[0, 1.178]]
+
+3. **Update A\_k = R @ Q**:
+
+   * A\_k ≈ \[\[2.969, 0.222], \[0.222, 1.030]]
+
+4. **Update V = V @ Q**:
+
+   * Multiply current V with new Q
+
+---
+
+### Continuing Iterations
+
+Repeat for more iterations until A\_k converges to a diagonal matrix and V stabilizes as the eigenvector matrix.
+
+---
+
+## Final Output 
+```text
+Diagonal Matrix (Eigenvalues):
+[[3.0, 0.0],
+ [0.0, 1.0]]
+
+Matrix V (Eigenvectors):
+[[ 0.707, -0.707],
+ [ 0.707,  0.707]]
+```
+
+* `D` gives the **eigenvalues**
+* `V` gives the **eigenvectors**
+
+---
+
+
+
+           
